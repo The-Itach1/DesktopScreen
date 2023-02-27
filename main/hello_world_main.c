@@ -16,6 +16,16 @@
 
 static const char *TAG = "MAIN APP";
 
+// 要创建的任务
+void vTaskCode( void * pvParameters )
+{
+    for( ;; )
+    { 
+        printf("Task run ...\n");
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+}
+
 void app_main(void)
 {
     printf("Hello world!\n");
@@ -23,6 +33,14 @@ void app_main(void)
     //打印几条日志
     ESP_LOGI(TAG, "this is info log");
     ESP_LOGE(TAG, "this is error log");
+    static uint8_t ucParameterToPass;
+    TaskHandle_t xHandle = NULL;
+    xTaskCreate(vTaskCode, 
+                     "Task", 
+                     2048, 
+                     &ucParameterToPass, 
+                     10, 
+                     &xHandle );
 
     /*打印芯片信息*/
     /* Print chip information */
@@ -40,6 +58,7 @@ void app_main(void)
             (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
 
     printf("Minimum free heap size: %d bytes\n", esp_get_minimum_free_heap_size());
+
 
     while(1){
         printf("system run ...\n");
