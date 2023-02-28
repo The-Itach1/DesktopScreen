@@ -14,6 +14,7 @@
 #include "esp_spi_flash.h"
 #include "esp_log.h"
 
+#include "ds_timer.h"
 static const char *TAG = "MAIN APP";
 
 // 要创建的任务
@@ -42,6 +43,8 @@ void app_main(void)
                      10, 
                      &xHandle );
 
+
+    ds_timer_init();
     /*打印芯片信息*/
     /* Print chip information */
     esp_chip_info_t chip_info;
