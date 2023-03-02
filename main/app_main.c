@@ -15,6 +15,10 @@
 #include "esp_log.h"
 
 #include "ds_timer.h"
+#include "ds_spiffs.h"
+#include "ds_system_data.h"
+#include "ds_nvs.h"
+
 static const char *TAG = "MAIN APP";
 
 // 要创建的任务
@@ -36,15 +40,35 @@ void app_main(void)
     ESP_LOGE(TAG, "this is error log");
     static uint8_t ucParameterToPass;
     TaskHandle_t xHandle = NULL;
-    xTaskCreate(vTaskCode, 
-                     "Task", 
-                     2048, 
-                     &ucParameterToPass, 
-                     10, 
-                     &xHandle );
+    // xTaskCreate(vTaskCode, 
+    //                  "Task", 
+    //                  2048, 
+    //                  &ucParameterToPass, 
+    //                  10, 
+    //                  &xHandle );
 
 
-    ds_timer_init();
+    //ds_timer_init();
+
+    //初始化和挂载 SPIFFS 文件系统。
+    init_spiffs();
+    //创建文件，写入文件，修改文件名称，关闭文件
+    ds_spiffs_test();
+    //卸载分区并禁用 SPIFFS
+    ds_spiffs_deinit();
+
+
+    char *ssid="Itach1";
+    char *psw="123456789";
+    //初始化wifi结构体数据
+    set_system_data_wifi_info(ssid,strlen(ssid),psw,strlen(psw));
+    //nvs初始化
+    ds_nvs_init();
+    //将wifi信息保存到nvs
+    ds_nvs_save_wifi_info();
+    //从nvs读取wifi信息。
+    ds_nvs_read_wifi_info();
+
     /*打印芯片信息*/
     /* Print chip information */
     esp_chip_info_t chip_info;
@@ -63,9 +87,9 @@ void app_main(void)
     printf("Minimum free heap size: %d bytes\n", esp_get_minimum_free_heap_size());
 
 
-    while(1){
-        printf("system run ...\n");
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
+    // while(1){
+    //     printf("system run ...\n");
+    //     vTaskDelay(1000 / portTICK_PERIOD_MS);
+    // }
 
 }
