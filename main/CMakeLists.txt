@@ -5,7 +5,7 @@ idf_component_register(SRCS
                             "src/hal/ds_timer.c"
                             "src/hal/ds_nvs.c"
                             "src/ds_system_data.c"
-
+                            "src/hal/ds_gpio.c"
                             "src/fs/ds_spiffs.c"
                     
                        INCLUDE_DIRS 

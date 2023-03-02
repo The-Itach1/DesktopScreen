@@ -18,6 +18,7 @@
 #include "ds_spiffs.h"
 #include "ds_system_data.h"
 #include "ds_nvs.h"
+#include "ds_gpio.h"
 
 static const char *TAG = "MAIN APP";
 
@@ -38,8 +39,8 @@ void app_main(void)
     //打印几条日志
     ESP_LOGI(TAG, "this is info log");
     ESP_LOGE(TAG, "this is error log");
-    static uint8_t ucParameterToPass;
-    TaskHandle_t xHandle = NULL;
+    // static uint8_t ucParameterToPass;
+    // TaskHandle_t xHandle = NULL;
     // xTaskCreate(vTaskCode, 
     //                  "Task", 
     //                  2048, 
@@ -69,6 +70,16 @@ void app_main(void)
     //从nvs读取wifi信息。
     ds_nvs_read_wifi_info();
 
+    //初始化tp触摸屏的gpio
+    ds_touch_gpio_init();
+    int cnt = 0 ;
+    while (1)
+    {
+        printf ( " cnt: %d \n " , cnt++);
+        vTaskDelay ( 1000 / portTICK_RATE_MS);
+        ds_gpio_set_touch_rst(cnt % 2);
+    }
+    
     /*打印芯片信息*/
     /* Print chip information */
     esp_chip_info_t chip_info;
