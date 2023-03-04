@@ -18,7 +18,7 @@
 #include "ds_spiffs.h"
 #include "ds_system_data.h"
 #include "ds_nvs.h"
-#include "ds_gpio.h"
+#include "ds_ft6336.h"
 
 static const char *TAG = "MAIN APP";
 
@@ -71,13 +71,16 @@ void app_main(void)
     ds_nvs_read_wifi_info();
 
     //初始化tp触摸屏的gpio
-    ds_touch_gpio_init();
-    int cnt = 0 ;
+    //ds_touch_gpio_init();
+
+    TP_POSITION_T position;
+    init_ft6336();
+
     while (1)
     {
-        printf ( " cnt: %d \n " , cnt++);
-        vTaskDelay ( 1000 / portTICK_RATE_MS);
-        ds_gpio_set_touch_rst(cnt % 2);
+        get_ft6336_touch_sta(&position);
+        vTaskDelay ( 10 / portTICK_RATE_MS);
+
     }
     
     /*打印芯片信息*/

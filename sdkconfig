@@ -133,6 +133,20 @@ CONFIG_PARTITION_TABLE_MD5=y
 # end of Partition Table
 
 #
+# DesktopScreen Configuration
+#
+
+#
+# I2C Master
+#
+CONFIG_I2C_MASTER_SCL=32
+CONFIG_I2C_MASTER_SDA=33
+CONFIG_I2C_MASTER_PORT_NUM=1
+CONFIG_I2C_MASTER_FREQUENCY=100000
+# end of I2C Master
+# end of DesktopScreen Configuration
+
+#
 # Compiler options
 #
 CONFIG_COMPILER_OPTIMIZATION_DEFAULT=y
