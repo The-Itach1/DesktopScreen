@@ -19,6 +19,7 @@
 #include "ds_system_data.h"
 #include "ds_nvs.h"
 #include "ds_ft6336.h"
+#include "ds_screen.h"
 
 static const char *TAG = "MAIN APP";
 
@@ -73,12 +74,15 @@ void app_main(void)
     //初始化tp触摸屏的gpio
     //ds_touch_gpio_init();
 
-    TP_POSITION_T position;
+    //TP_POSITION_T position;
     init_ft6336();
+
+    init_screen_interface();
+    ds_screen_init();
 
     while (1)
     {
-        get_ft6336_touch_sta(&position);
+        //get_ft6336_touch_sta(&position);
         vTaskDelay ( 10 / portTICK_RATE_MS);
 
     }
