@@ -13,6 +13,8 @@ idf.py -p /dev/ttyUSB0 flash
 idf.py -p /dev/ttyUSB0 monitor
 //构建、下载、监视
 idf.py -p /dev/ttyUSB0 flash monitor
+//清空flash
+idf.py -p PORT erase_flash
 
 git checkout -b name
 git branch -a
@@ -23,4 +25,4 @@ git commit -m ""
 git push origin 远程仓库链接
 git push -u origin dev1
 
-触摸屏驱动
+Wifi ap

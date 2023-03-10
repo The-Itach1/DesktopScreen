@@ -1,0 +1,330 @@
+      
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桌面屏幕设置</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: rgb(235, 235, 235);
+        }
+        
+        form {
+            width: 400px;
+            height: 200px;
+            background-color: white;
+            padding: 5px;
+            box-sizing: border-box;
+            position: absolute;
+            left: 50%;
+            top: 1%;
+            /* 水平居中 */
+            transform: translateX(-50%);
+            /* transform: translate(-50%, -50%); */
+            /* 相对于现在所处位置的位移变化，x便偏移自己宽度的50%，y偏移自己高度的50% */
+        }
+
+        form_tomato {
+            width: 400px;
+            height: 240px;
+            background-color: white;
+            padding: 5px;
+            box-sizing: border-box;
+            position: absolute;
+            left: 50%;
+            top: 35%;
+            transform: translateX(-50%);
+            /* transform: translate(-50%, -50%); */
+            /* 相对于现在所处位置的位移变化，x便偏移自己宽度的50%，y偏移自己高度的50% */
+        }
+
+        form_weather {
+            width: 400px;
+            height: 160px;
+            background-color: white;
+            padding: 5px;
+            box-sizing: border-box;
+            position: absolute;
+            left: 50%;
+            top: 75%;
+            transform: translateX(-50%);
+            /* transform: translate(-50%, -50%); */
+            /* 相对于现在所处位置的位移变化，x便偏移自己宽度的50%，y偏移自己高度的50% */
+        }
+        
+        h2 {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        form input {
+            width: 100%;
+            height: 30px;
+            display: block;
+            margin-bottom: 8px;
+            padding-left: 10px;
+            box-sizing: border-box;
+        }
+
+        form button {
+            width: 100%;
+            height: 30px;
+            display: block;
+            margin-bottom: 8px;
+            padding-left: 10px;
+            box-sizing: border-box;
+        }
+
+        form_tomato input {
+            width: 100%;
+            height: 30px;
+            display: block;
+            margin-bottom: 8px;
+            padding-left: 10px;
+            box-sizing: border-box;
+        }
+
+        form_tomato select {
+            width: 100%;
+            height: 30px;
+            display: block;
+            margin-bottom: 8px;
+            padding-left: 10px;
+            box-sizing: border-box;
+        }
+
+        form_tomato button {
+            width: 100%;
+            height: 30px;
+            display: block;
+            margin-bottom: 8px;
+            padding-left: 10px;
+            box-sizing: border-box;
+        }
+
+        form_weather select {
+            width: 100%;
+            height: 30px;
+            display: block;
+            margin-bottom: 8px;
+            padding-left: 10px;
+            box-sizing: border-box;
+        }
+
+        form_weather button {
+            width: 100%;
+            height: 30px;
+            display: block;
+            margin-bottom: 8px;
+            padding-left: 10px;
+            box-sizing: border-box;
+        }
+        
+        .mya {
+            width: 100%;
+            height: 30px;
+            margin-bottom: 20x;
+        }
+        
+        .mya a:nth-child(1) {
+            float: left;
+        }
+        
+        .mya a:nth-child(2) {
+            float: right;
+        }
+        
+        button {
+            width: 100%;
+            height: 40px;
+            background-color: rgb(235, 235, 235);
+            border: none;
+        }
+        
+        button:active {
+            box-shadow: 0 0 3px rgb(173, 172, 172);
+            /* x偏移  y偏移  模糊值 颜色 */
+        }
+    </style>
+</head>
+
+<body>
+
+    <form action="">
+        <h2>WiFi 密码配置</h2>
+        <input id="wifi" type="text" placeholder="请输入WiFi账号">
+        <input id="code" type="text" placeholder="请输入WiFi密码">
+        <button id="set_wifi" type="button" onclick="send_wifi()">提交</button>
+    </form>
+
+    <form_tomato action="">
+        <h2>番茄时钟设置</h2>
+
+        <select id="work_time">
+            <option value="5">工作5分钟</option>
+            <option value="10">工作10分钟</option>
+            <option value="15">工作15分钟</option>
+            <option value="20" selected="selected">工作20分钟</option>
+        </select>
+
+        <select id="rest_time">
+            <option value="5" selected="selected">休息5分钟</option>
+            <option value="10">休息10分钟</option>
+            <option value="15">休息15分钟</option>
+            <option value="20">休息20分钟</option>
+        </select>
+
+        <select id="time_count">
+            <option value="1">重复1轮</option>
+            <option value="2">重复2轮</option>
+            <option value="3" selected="selected">重复3轮</option>
+            <option value="4">重复4轮</option>
+        </select>
+        <button id="set_tomato" type="button" onclick="send_tomato()">提交</button>
+    
+    </form_tomato>
+
+    <form_weather action="">
+        <h2>天气城市设置</h2>
+
+        <select id="city">
+            <option value="guangzhou">广州</option>
+            <option value="shenzhen">深圳</option>
+            <option value="shanghai">上海</option>
+            <option value="beijing" selected="selected">北京</option>
+        </select>
+
+        <button id="set_city" type="button" onclick="send_city()">提交</button>
+
+        <button id="back" type="button" onclick="send_back()">退出</button>
+
+        
+    </form_weather>
+
+
+</body>
+
+
+
+<script>
+function setpath() {
+    var default_path = document.getElementById("newfile").files[0].name;
+    document.getElementById("filepath").value = default_path;
+}
+
+function send_wifi() {
+    var input_ssid = document.getElementById("wifi").value;
+    var input_code = document.getElementById("code").value;
+    var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/wifi_data", true);
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4) {
+                if (xhttp.status == 200) {
+                    alert("WiFi设置成功！")
+                    console.log(xhttp.responseText);
+                    location.reload()
+                } else if (xhttp.status == 0) {
+                    alert("设置失败，请检查网络连接！");
+                    location.reload()
+                    return
+                } else {
+                    alert(xhttp.status + " Error!\n" + xhttp.responseText);
+                    location.reload()
+                    return
+                }
+            }
+        };
+    var data = {
+        "wifi_name":input_ssid,
+        "wifi_code":input_code
+    }
+    xhttp.send(JSON.stringify(data));
+}
+
+function send_tomato() {
+    var input_work_time = document.getElementById("work_time").value;
+    var input_rest_time = document.getElementById("rest_time").value;
+    var input_time_count = document.getElementById("time_count").value;
+    var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/tomato_data", true);
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4) {
+                if (xhttp.status == 200) {
+                    alert("番茄时钟设置成功！")
+                    console.log(xhttp.responseText);
+                    location.reload()
+                } else if (xhttp.status == 0) {
+                    alert("设置失败，请检查网络连接！");
+                    location.reload()
+                } else {
+                    alert(xhttp.status + " Error!\n" + xhttp.responseText);
+                    location.reload()
+                }
+            }
+        };
+    var data = {
+        "work_time":input_work_time,
+        "rest_time":input_rest_time,
+        "time_count":input_time_count
+    }
+    xhttp.send(JSON.stringify(data));
+}
+
+function send_city() {
+    var input_city = document.getElementById("city").value;
+    var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/city_data", true);
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4) {
+                if (xhttp.status == 200) {
+                    alert("城市设置成功！")
+                    console.log(xhttp.responseText);
+                    location.reload()
+                } else if (xhttp.status == 0) {
+                    alert("设置失败，请检查网络连接！");
+                    location.reload()
+                } else {
+                    alert(xhttp.status + " Error!\n" + xhttp.responseText);
+                    location.reload()
+                }
+            }
+        };
+    var data = {
+        "city":input_city,
+    }
+    xhttp.send(JSON.stringify(data));
+}
+
+function send_back() {
+    var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/back", true);
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4) {
+                if (xhttp.status == 200) {
+                    alert("退出设置成功！")
+                    console.log(xhttp.responseText);
+                    location.reload()
+                } else if (xhttp.status == 0) {
+                    alert("设置失败，请检查网络连接！");
+                    location.reload()
+                } else {
+                    alert(xhttp.status + " Error!\n" + xhttp.responseText);
+                    location.reload()
+                }
+            }
+        };
+    var data = {
+        "back":"back",
+    }
+    xhttp.send(JSON.stringify(data));
+}
+
+</script>
+
+    

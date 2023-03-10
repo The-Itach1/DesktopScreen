@@ -17,6 +17,9 @@ idf_component_register(SRCS
                             "src/driver/ds_screen.c"
 
                             "src/data/ds_data_page.c"
+                            "src/net/ds_wifi_ap.c"
+                            "src/net/ds_wifi_sta.c"
+                            "src/net/ds_http_server.c"
                        INCLUDE_DIRS 
                             "."
                             "./include"
@@ -24,4 +27,8 @@ idf_component_register(SRCS
                             "./include/fs"
                             "./include/driver"
                             "./include/data"
+                            "./include/net"
+                        EMBED_FILES 
+                            "./html/favicon.ico"
+                            "./html/setting.html"
                             )

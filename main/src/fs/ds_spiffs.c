@@ -112,5 +112,7 @@ void ds_spiffs_test(){
         *pos = '\0';
     }
     ESP_LOGI(TAG, "Read from file: '%s'", line);
+
+    
 }
 

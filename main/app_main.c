@@ -20,6 +20,9 @@
 #include "ds_nvs.h"
 #include "ds_ft6336.h"
 #include "ds_screen.h"
+#include "ds_wifi_ap.h"
+#include "ds_wifi_sta.h"
+#include "ds_http_server.h"
 
 static const char *TAG = "MAIN APP";
 
@@ -53,11 +56,11 @@ void app_main(void)
     //ds_timer_init();
 
     //初始化和挂载 SPIFFS 文件系统。
-    init_spiffs();
+    //init_spiffs();
     //创建文件，写入文件，修改文件名称，关闭文件
-    ds_spiffs_test();
+    //ds_spiffs_test();
     //卸载分区并禁用 SPIFFS
-    ds_spiffs_deinit();
+    //ds_spiffs_deinit();
 
 
     char *ssid="Itach1";
@@ -69,7 +72,7 @@ void app_main(void)
     //将wifi信息保存到nvs
     ds_nvs_save_wifi_info();
     //从nvs读取wifi信息。
-    ds_nvs_read_wifi_info();
+    //ds_nvs_read_wifi_info();
 
     //初始化tp触摸屏的gpio
     //ds_touch_gpio_init();
@@ -77,8 +80,16 @@ void app_main(void)
     //TP_POSITION_T position;
     init_ft6336();
 
+    //表情包图片
     init_screen_interface();
     ds_screen_init();
+
+    //作为一个热点
+    ds_wifi_ap_start();
+    ds_http_server_init();
+
+    //用nvs存储的账号连接其他热点
+    //ds_wifi_sta_start();
 
     while (1)
     {
