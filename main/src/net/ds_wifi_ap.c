@@ -32,6 +32,8 @@ static const char *TAG = "wifi softAP";
 
 static uint8_t start_status = 0;
 
+esp_netif_t *sta;
+
 static void wifi_event_handler(void* arg, esp_event_base_t event_base,
                                     int32_t event_id, void* event_data)
 {
@@ -48,16 +50,15 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
 
 void wifi_init_softap(void)
 {
-    ESP_ERROR_CHECK(esp_netif_init());
-    ESP_ERROR_CHECK(esp_event_loop_create_default());
-    esp_netif_create_default_wifi_ap();
+    // ESP_ERROR_CHECK(esp_netif_init());
+    // ESP_ERROR_CHECK(esp_event_loop_create_default());
+    sta = esp_netif_create_default_wifi_ap();
 
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
 
     ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL));
 
-    //初始化并启动WiFi
     wifi_config_t wifi_config = {
         .ap = {
             .ssid = EXAMPLE_ESP_WIFI_SSID,
@@ -80,6 +81,14 @@ void wifi_init_softap(void)
              EXAMPLE_ESP_WIFI_SSID, EXAMPLE_ESP_WIFI_PASS, EXAMPLE_ESP_WIFI_CHANNEL);
 }
 
+
+/*
+#
+# Wifi AP
+#
+CONFIG_ESP_AP_WIFI_SSID="screen"
+CONFIG_ESP_AP_WIFI_PASSWORD="123456789"
+*/
 void ds_wifi_ap_start(void)
 {
     if(start_status == 0){
@@ -95,6 +104,7 @@ void ds_wifi_ap_stop(){
     if(start_status == 1){
         start_status = 0;
         ESP_LOGI(TAG, "ESP_WIFI_MODE_AP STOP");
+        esp_netif_destroy_default_wifi(sta);
         ESP_ERROR_CHECK(esp_wifi_stop() );
         ESP_ERROR_CHECK(esp_wifi_deinit() );
     }else{

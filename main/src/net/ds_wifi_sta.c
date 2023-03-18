@@ -73,7 +73,6 @@ static void event_handler(void* arg, esp_event_base_t event_base,
 
 void wifi_init_sta(void)
 {
-    // 创建事件组
     s_wifi_event_group = xEventGroupCreate();
 
     // ESP_ERROR_CHECK(esp_netif_init());
@@ -83,9 +82,8 @@ void wifi_init_sta(void)
 
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
-    // 注册WIFI事件
+
     ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler, NULL));
-    // 注册IP事件
     ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler, NULL));
 
     wifi_config_t wifi_config = {
@@ -96,7 +94,6 @@ void wifi_init_sta(void)
              * However these modes are deprecated and not advisable to be used. Incase your Access point
              * doesn't support WPA2, these mode can be enabled by commenting below line */
 	     .threshold.authmode = WIFI_AUTH_WPA2_PSK,
-
             .pmf_cfg = {
                 .capable = true,
                 .required = false
@@ -106,12 +103,13 @@ void wifi_init_sta(void)
 
     memcpy(wifi_config.sta.ssid,get_system_data().setting_ssid,32);
     memcpy(wifi_config.sta.password,get_system_data().setting_psw,64);
-    printf("\r\nwifi_ssid:");
+
+    printf("\r\nget wifi_ssid:");
     for(int i = 0;i<get_system_data().setting_ssid_len;i++){
         printf("%c",wifi_config.sta.ssid[i]);
     }
 
-    printf("\r\nwifi_password:");
+    printf("\r\nget wifi_password:");
     for(int i = 0;i<get_system_data().setting_psw_len;i++){
         printf("%c",wifi_config.sta.password[i]);
     }
@@ -123,7 +121,6 @@ void wifi_init_sta(void)
 
     ESP_LOGI(TAG, "wifi_init_sta finished.");
 
-    // 创建事件组
     /* Waiting until either the connection is established (WIFI_CONNECTED_BIT) or connection failed for the maximum
      * number of re-tries (WIFI_FAIL_BIT). The bits are set by event_handler() (see above) */
     EventBits_t bits = xEventGroupWaitBits(s_wifi_event_group,
@@ -132,20 +129,19 @@ void wifi_init_sta(void)
             pdFALSE,
             portMAX_DELAY);
 
-    // 连接事件组 
     /* xEventGroupWaitBits() returns the bits before the call returned, hence we can test which event actually
      * happened. */
     if (bits & WIFI_CONNECTED_BIT) {
         ESP_LOGI(TAG, "connected to ap SSID:%s password:%s",
                  EXAMPLE_ESP_WIFI_SSID, EXAMPLE_ESP_WIFI_PASS);
+        set_wifi_sta_status(WIFI_STA_MODE_CONNECT_SUCCESS);
     } else if (bits & WIFI_FAIL_BIT) {
         ESP_LOGI(TAG, "Failed to connect to SSID:%s, password:%s",
                  EXAMPLE_ESP_WIFI_SSID, EXAMPLE_ESP_WIFI_PASS);
+        set_wifi_sta_status(WIFI_STA_MODE_CONNECT_FAIL);
     } else {
         ESP_LOGE(TAG, "UNEXPECTED EVENT");
     }
-
-
 }
 
 void ds_wifi_sta_start(void)
@@ -155,7 +151,7 @@ void ds_wifi_sta_start(void)
         ESP_LOGI(TAG, "ESP_WIFI_MODE_STA START");
         wifi_init_sta();
     }else{
-        ESP_LOGI(TAG, "ESP_WIFI_MODE_STA IS STARTING");
+        // ESP_LOGI(TAG, "ESP_WIFI_MODE_STA IS STARTING");
     }
 }
 

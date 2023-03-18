@@ -118,14 +118,6 @@ static void ds_screen_display_white(void){
 	}		
 }
 
-static void ds_ui_back_cxk_page(void){
-    unsigned int i;
-	spi_send_cmd(0x24); 
-	for(i=0;i<5000;i++){
-		spi_send_data(gImage_cxk_page[i]);  
-	} 
-}
-
 
 //图片全刷-数据函数
 void ds_screen_full_display_data(const uint8_t *data){
@@ -334,7 +326,7 @@ void ds_screen_clean_white(){
 
 //初始化
 void ds_screen_init(){
-	ds_screen_full_display(ds_ui_back_cxk_page);														//EPD_sleep
+	ds_screen_full_display(ds_screen_display_white);														//EPD_sleep
 }
 
 void Epaper_READBUSY(void)

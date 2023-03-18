@@ -27,7 +27,5 @@ void test_SSD1681(void);
 void refresh_part();
 void deep_sleep();
 
-void ds_screen_wordcup_backgroud();
-
 #endif
 

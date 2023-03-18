@@ -9,8 +9,6 @@
 
 
 esp_err_t init_spiffs(void);
-void ds_spiffs_deinit(void);
-void ds_spiffs_test(void);
 
 
 #endif

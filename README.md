@@ -1,28 +1,32 @@
-//设置目标板卡相关
-idf.py set-target esp32
 
-//可配置工程属性
+## 配置环境
+get_idf
+
+## 配置 
 idf.py menuconfig
 
+## 编译
+ idf.py build
+
+## 清除
 idf.py fullclean
-idf.py build
 
-//下载
+## 下载
 idf.py -p /dev/ttyUSB0 flash
-//监视器
+
+## 监视器
 idf.py -p /dev/ttyUSB0 monitor
-//构建、下载、监视
+
+## 构建、下载、监视
 idf.py -p /dev/ttyUSB0 flash monitor
-//清空flash
-idf.py -p PORT erase_flash
 
-git checkout -b name
-git branch -a
+## 擦除
+idf.py -p /dev/ttyUSB0 erase-flash
 
-git init
-git add
-git commit -m ""
-git push origin 远程仓库链接
-git push -u origin dev1
+## 编译成功提示
+Project build complete.
 
-Wifi ap
+## 字体库下载
+python esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 115200 write_flash -z 0x15D000 myFont1.bin
+
+final

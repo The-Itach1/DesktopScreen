@@ -27,7 +27,7 @@ static esp_err_t i2c_master_set_addr(uint8_t u8Cmd){
     esp_err_t ret = i2c_master_cmd_begin(I2C_MASTER_NUM, cmd, 1000 / portTICK_RATE_MS);
     i2c_cmd_link_delete(cmd);
     if (ret != ESP_OK) {
-        printf("i2c_master_set_addr error\n");
+        printf("i2c_master_set_addr error !! check tp is connect ?\n");
     }
     return ret;
 }
@@ -53,7 +53,7 @@ esp_err_t i2c_master_read_slave(uint8_t u8Cmd, uint8_t *data_rd, size_t size)
     esp_err_t ret = i2c_master_cmd_begin(I2C_MASTER_NUM, cmd, 1000 / portTICK_RATE_MS);
     i2c_cmd_link_delete(cmd);
     if (ret != ESP_OK) {
-        printf("i2c_master_read_slave error\n");
+        printf("i2c_master_read_slave error !! check tp is connect ?\n");
     }
     return ret;
 }

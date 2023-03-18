@@ -8,6 +8,7 @@
 #include "driver/gpio.h"
 
 #include "ds_gpio.h"
+#include "ds_ft6336.h"
 #include "ds_system_data.h"
 
 /**
@@ -50,24 +51,34 @@ static void gpio_task_example(void* arg)
     for(;;) {
         if(xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
             printf("GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
-            
+            if(io_num == GPIO_INPUT_IO_0){
+                set_tp_wackup_timeleft(60);
+                if(gpio_get_level(io_num) == 0){
+                    //TODO START COUNT 
+                    reset_tp_action_manage();
+                }else{
+                    //TODO STOP COUNT 
+                    check_tp_action();
+                }
+            }
         }
     }
 }
 
 void ds_touch_gpio_init(){
+    static bool has_init_isr = false;
     gpio_config_t io_conf;
-    //禁用中断
+    //disable interrupt
     io_conf.intr_type = GPIO_PIN_INTR_DISABLE;
-    //设置为输出模式
+    //set as output mode
     io_conf.mode = GPIO_MODE_OUTPUT;
-    //要设置的引脚的位掩码
+    //bit mask of the pins that you want to set,e.g.GPIO18/19
     io_conf.pin_bit_mask = GPIO_OUTPUT_PIN_SEL;
-    //禁用下拉模式
+    //disable pull-down mode
     io_conf.pull_down_en = 0;
-    //禁用上拉模式
+    //disable pull-up mode
     io_conf.pull_up_en = 0;
-    //使用给定的设置配置 GPIO
+    //configure GPIO with the given settings
     gpio_config(&io_conf);
 
     //GPIO interrupt type : both rising and falling edge
@@ -83,16 +94,26 @@ void ds_touch_gpio_init(){
     //change gpio intrrupt type for one pin
     // gpio_set_intr_type(GPIO_INPUT_IO_0, GPIO_INTR_NEGEDGE);
 
-     //创建一个队列来处理来自 isr 的 gpio 事件
-    gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
-    //启动 gpio 任务
-    xTaskCreate(gpio_task_example, "gpio_task_example", 2048, NULL, 10, NULL);
+    if(has_init_isr == false){
+        //create a queue to handle gpio event from isr
+        gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
+        //start gpio task
+        xTaskCreate(gpio_task_example, "gpio_task_example", 2048, NULL, 10, NULL);
 
-    //安装 gpio isr 服务
-    gpio_install_isr_service(ESP_INTR_FLAG_DEFAULT);
-    //为特定的 gpio pin 挂钩 isr 处理程序
+        //install gpio isr service
+        gpio_install_isr_service(ESP_INTR_FLAG_DEFAULT);
+        //hook isr handler for specific gpio pin
+        gpio_isr_handler_add(GPIO_INPUT_IO_0, gpio_isr_handler, (void*) GPIO_INPUT_IO_0);
+    }
+    has_init_isr = true;
+}
+
+void ds_touch_gpio_isr_remove(){
+    gpio_isr_handler_remove(GPIO_INPUT_IO_0);
+}
+
+void ds_touch_gpio_isr_add(){
     gpio_isr_handler_add(GPIO_INPUT_IO_0, gpio_isr_handler, (void*) GPIO_INPUT_IO_0);
-
 }
 
 void ds_screen_gpio_init(){
@@ -126,15 +147,15 @@ void ds_screen_gpio_init(){
     //set as input mode    
     io_conf.mode = GPIO_MODE_INPUT;
     //enable pull-up mode
-    io_conf.pull_up_en = 0;
+    io_conf.pull_up_en = 1;
     gpio_config(&io_conf);
     //change gpio intrrupt type for one pin
     // gpio_set_intr_type(SCREEN_GPIO_INTPUT_BUSY, GPIO_INTR_NEGEDGE);
 
-    //install gpio isr service
-    gpio_install_isr_service(ESP_INTR_FLAG_DEFAULT);
-    //hook isr handler for specific gpio pin
-    gpio_isr_handler_add(SCREEN_GPIO_INTPUT_BUSY, gpio_isr_handler, (void*) SCREEN_GPIO_INTPUT_BUSY);
+    // //install gpio isr service
+    // gpio_install_isr_service(ESP_INTR_FLAG_DEFAULT);
+    // //hook isr handler for specific gpio pin
+    // gpio_isr_handler_add(SCREEN_GPIO_INTPUT_BUSY, gpio_isr_handler, (void*) SCREEN_GPIO_INTPUT_BUSY);
 }
 
 void ds_gpio_init(){
